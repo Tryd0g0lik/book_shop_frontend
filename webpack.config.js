@@ -1,109 +1,103 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { Configuration } from "webpack";
-import "webpack-dev-server";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
+const path = require("path");
+// const { fileURLToPath } = require("url");
+const { Configuration } = require("webpack");
+require("webpack-dev-server");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const isProduction = process.env.NODE_ENV === "production";
+// const filename = fileURLToPath(require.meta.url);
+// const dirname = path.dirname(filename);
+let isProduction = null;
+// console.log(`isProduction: ${isProduction} = ${ process.env.NODE_ENV}`);
 const stylesHandler = MiniCssExtractPlugin.loader;
 const BundleTracker = require('webpack-bundle-tracker');
 
 /** @type {import("webpack").Configuration} */
-const config = {
-    entry: "./src/index.ts",
-    cache: false,
-    
-    output: {
-        path: path.resolve(__dirname, "dist"),
-        if (isProduction) {
-            path: path.resolve(__dirname, "../backend/catalog/static/scripts/wagtail-admin")
+const config = (env, arg) => {
+    isProduction = arg.mode === "production";
+    console.log(`config.mode: ${arg.mode}`);
+    console.log(`isProduction: ${isProduction}`);
+    return{
+        entry: "./src/index.ts",
+        cache: false,
+        mode: arg.mode,
+        
+        output: {
+            path: !isProduction? path.resolve(__dirname, "dist") :path.resolve(__dirname, "../backend/catalog/static/scripts/wagtail-admin"),
+            filename: "admin_catalog_[id]_[fullhash].js",
+            // library: 'wagtailAdmin',
+            // libraryTarget: 'umd',
+            publicPath: "/static/scripts/wagtail-admin/",
+            clean: true,
         },
-        filename: "admin-catalog-[id]-[fullhash].js",
-        publicPath: "/static/scripts/wagtail-admin/",
-        clear: true,
-    },
-    devServer: {
-        open: true,
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: "index.html"
-        }),
-        new MiniCssExtractPlugin({
-            fileename: path.resolve(__dirname, "dist/styles/[name].css"),
-            if (isProduction){
-                fileename: "../../styles/[name].css"
-            }
-            
-        }),
-        // Add your plugins here
-        // Learn more about plugins from https://webpack.js.org/configuration/plugins/
-        new BundleTracker({            
-            path: path.join(__dirname, 'dist/bundles'),
-            if (isProduction){
-                path: path.join(__dirname, "../backend/catalog/static")
-            },            
-            filename: 'webpack-stats.json',
-        }),
-    ],
-    module: {
-        rules: [
-            {
-                test: /\.(ts|tsx)$/i,
-                loader:  'babel-loader',// "ts-loader",
-                exclude: [
-                    path.resolve(__dirname, '**/dist'),
-                    path.resolve(__dirname, 'node_modules'),
-                    path.resolve(__dirname, 'dist'),
-                ],
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [MiniCssExtractPlugin.loader,
-                    
-                    stylesHandler, {
-                        loader: 'css-loader',
-                        options: { importLoaders: 1 },
-                    }, "postcss-loader", "sass-loader"],
-            },
-            {
-                test: /\.css$/i,
-                use: [stylesHandler, {
-                        loader: 'css-loader',
-                        options: { importLoaders: 1 },
-                    }, "postcss-loader"],
-            },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: "asset",
-            },
-            
-            {
-                test: /\.html$/i,
-                use: ["html-loader"],
-            },
-
-            // Add your rules for custom modules here
-            // Learn more about loaders from https://webpack.js.org/loaders/
+        devServer: {
+            open: true,
+        },
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: "index.html"
+            }),
+            new MiniCssExtractPlugin({
+                filename: !isProduction? "styles/[path][name][ext]" : "dist/styles/[path][name][ext]",
+                
+            }),
+            // Add your plugins here
+            // Learn more about plugins expect(https://webpack.js.org/configuration/plugins/
+            new BundleTracker({            
+                path: !isProduction? path.join(__dirname, 'dist/bundles') : path.join(__dirname, "../backend/catalog/static"),          
+                filename: 'webpack-stats.json',
+            }),
         ],
-    },
-    resolve: {
-        extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
-        modules: [path.resolve(__dirname, 'node_modules')],
-        alias: []
-    },
-};
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/i,
+                    loader:  'babel-loader',// "ts-loader",
+                    exclude: [
+                        path.resolve(__dirname, '**/dist'),
+                        path.resolve(__dirname, 'node_modules'),
+                        path.resolve(__dirname, 'dist'),
+                    ],
+                },
+                {
+                    test: /\.s[ac]ss$/i,
+                    use: [MiniCssExtractPlugin.loader,
+                        
+                        stylesHandler,'css-loader', "postcss-loader", "sass-loader"],
+                },
+                {
+                    test: /\.css$/i,
+                    use: [stylesHandler, 'css-loader', "postcss-loader"],
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                    type: "asset",
+                },
+                
+                {
+                    test: /\.html$/i,
+                    use: ["html-loader"],
+                },
 
-export default () => {
-    if (isProduction) {
-        config.mode = "production";
-    } else {
-        config.mode = "development";
-    }
-    return config;
-};
+                // Add your rules for custom modules here
+                // Learn more about loaders expect(https://webpack.js.org/loaders/
+            ],
+        },
+        resolve: {
+            extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+            modules: [path.resolve(__dirname, 'node_modules')],
+            alias: []
+        },
+}};
+
+module.exports = config;
+// module.exports = () => {
+//     if (isProduction) {
+//         config.mode = "production";
+//     } else {
+//         config.mode = "development";
+//     }
+//     return config;
+// };

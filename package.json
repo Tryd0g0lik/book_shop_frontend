@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "eslint ./src --ext ts,css,js,",
     "build": "webpack --mode=development --config webpack.config.js",
-    "build:prodo": "webpack --mode=prodaction --config webpack.config.js"
+    "build:prodo": "webpack --mode=production --config webpack.config.js"
   },
   "engines": {
     "npm": ">=10.0"
@@ -45,6 +45,7 @@
     "babel": "^6.23.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^10.1.1",
+    "babel-plugin-module-resolver": "^5.0.3",
     "css-loader": "^7.1.4",
     "eslint": "^10.5.0",
     "globals": "^17.7.0",
