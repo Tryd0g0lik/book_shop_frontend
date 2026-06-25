@@ -11,7 +11,7 @@ function customForm() {
         // It is a main sections of the code.
         let inlineChildPropertyHtmlAll = [] as HTMLElement[];
         boxHtmlAll.forEach((boxHtml) => {
-            const inlineChildArr= boxHtml.querySelectorAll<HTMLElement>("[id^='inline_child_']");
+            const inlineChildArr = boxHtml.querySelectorAll<HTMLElement>("[id^='inline_child_']");
             inlineChildPropertyHtmlAll.push(...inlineChildArr as unknown as HTMLElement[]);
         });
 
@@ -19,30 +19,34 @@ function customForm() {
 
         if (inlineChildPropertyHtmlAll.length !== 0) {
 
-            const worksBoks = Array.from(inlineChildPropertyHtmlAll).filter((item, i) => item.id.startsWith('inline_child_') && item.id.split("-")[item.id.split("-").length - 1].match(/[0-9]+/) !== null);
+            const worksBoks = Array.from(inlineChildPropertyHtmlAll).filter((item) => item.id.startsWith('inline_child_')
+            && item.id.split("-")[item.id.split("-").length - 1].match(/[0-9]+/) !== null);
 
-            worksBoks.forEach((item: HTMLElement, i) =>{
-                const itemContent = item.querySelector('[id^="inline_child_"][id$="-panel-content"]');
+            worksBoks.forEach((item: HTMLElement) => {
+                const itemContent = item.querySelector("[id^='inline_child_'][id$='-panel-content']");
                 if (itemContent === null) return;
                 const buttomHTMLAll = item.querySelectorAll("button.w-panel__toggle");
                 // Add all attributes which we are getting (in code) when cliking on the buttum.
-                itemContent.setAttribute("hidden","until-found");
+                itemContent.setAttribute("hidden", "until-found");
                 buttomHTMLAll[0].setAttribute("aria-expanded", "false");
-
-
             });
-
         }
-    } catch (error) {throw error};
+    } catch (error) {
+        throw error;
+    };
 };
 
 document.removeEventListener("DOMContentLoaded", () => {
     try {
         customForm();
-    } catch (error) {console.error(error);};
+    } catch (error) {
+        console.error(error);
+    };
 });
 document.addEventListener("DOMContentLoaded", () => {
     try {
         customForm();
-    } catch (error) {console.error(error);};
+    } catch (error) {
+        console.error(error);
+    };
 });

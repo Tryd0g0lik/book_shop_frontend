@@ -16,7 +16,7 @@
   "license": "ISC",
   "author": "undefined <Tryd0g0lik: work80@mail.ru>",
   "type": "commonjs",
-  "main": "../src/index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "lint": "eslint ./src --ext ts,css,js,",
     

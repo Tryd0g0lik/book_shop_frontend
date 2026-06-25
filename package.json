@@ -23,7 +23,7 @@
   "type": "commonjs",
   "main": "../src/index.ts",
   "scripts": {
-    "lint": "eslint ../src --ext ts,css,js,",
+    "lint": "eslint ./src --ext ts,css,js && npm workspace=dowload run lint",
     "build:download": "webpack --mode=development --config webpack.config.js",
     "build": "webpack --mode=development --config webpack.config.js && npm --workspace=download run build",
     "build:prodo": "webpack --mode=production --config webpack.config.js && npm --workspace=download run build:prodo"

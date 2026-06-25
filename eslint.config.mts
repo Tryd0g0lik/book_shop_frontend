@@ -39,8 +39,8 @@ export default defineConfig([
       },
     rules: {
       '@stylistic/semi': ['error', 'always'],
-      '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/indent': ['error', 2],
+      '@stylistic/quotes': ['error', 'double'],
+      '@stylistic/indent': ['error', 4],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
       
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -48,6 +48,7 @@ export default defineConfig([
         argsIgnorePattern: '^_',
       }],
       '@typescript-eslint/explicit-function-return-type': 'warn',
+      
     }
    },
   
