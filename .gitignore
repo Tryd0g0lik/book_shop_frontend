@@ -278,7 +278,7 @@ logs_server.txt
 bundles
 webpack-stats.json
 package-lock.json
-!.vscode
+.vscode
 !./.browserslistrc
 !./.editorconfig
 !./.gitignore

@@ -13,7 +13,8 @@
     "isolatedModules": true,
     "rewriteRelativeImportExtensions": true,
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*",],
   "exclude": [
     "./node_modules",
     "./node_modules/**/*.js",
@@ -22,7 +23,8 @@
     "dist",
     "*eslintrc.*",
     "*/**/*.json",
-    "__test__"
+    "__test__",
+    "**/webpack.*",
 
   ]
 }

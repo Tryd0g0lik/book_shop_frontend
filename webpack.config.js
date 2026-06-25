@@ -1,4 +1,4 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
+// webpack.config.js
 
 const path = require("path");
 // const { fileURLToPath } = require("url");
@@ -7,8 +7,8 @@ require("webpack-dev-server");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-// const filename = fileURLToPath(require.meta.url);
-// const dirname = path.dirname(filename);
+const {merge} = require('webpack-merge');
+// const download =  require('./download');
 let isProduction = null;
 // console.log(`isProduction: ${isProduction} = ${ process.env.NODE_ENV}`);
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -19,11 +19,11 @@ const config = (env, arg) => {
     isProduction = arg.mode === "production";
     console.log(`config.mode: ${arg.mode}`);
     console.log(`isProduction: ${isProduction}`);
-    return{
+    return {
         entry: "./src/index.ts",
         cache: false,
         mode: arg.mode,
-        
+        target: "web",
         output: {
             path: !isProduction? path.resolve(__dirname, "dist") :path.resolve(__dirname, "../backend/catalog/static/scripts/wagtail-admin"),
             filename: "admin_catalog_[id]_[fullhash].js",
@@ -31,9 +31,6 @@ const config = (env, arg) => {
             // libraryTarget: 'umd',
             publicPath: "/static/scripts/wagtail-admin/",
             clean: true,
-        },
-        devServer: {
-            open: true,
         },
         plugins: [
             new HtmlWebpackPlugin({
@@ -90,7 +87,8 @@ const config = (env, arg) => {
             modules: [path.resolve(__dirname, 'node_modules')],
             alias: []
         },
-}};
+    };
+};
 
 module.exports = config;
 // module.exports = () => {

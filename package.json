@@ -12,21 +12,28 @@
     "wagtail",
     "django"
   ],
+  
+  "workspaces": [
+    "download"
+  ],
+  
   "private": "true",
   "license": "ISC",
   "author": "undefined <Tryd0g0lik: work80@mail.ru>",
   "type": "commonjs",
-  "main": "src/index.ts",
+  "main": "../src/index.ts",
   "scripts": {
-    "lint": "eslint ./src --ext ts,css,js,",
-    "build": "webpack --mode=development --config webpack.config.js",
-    "build:prodo": "webpack --mode=production --config webpack.config.js"
+    "lint": "eslint ../src --ext ts,css,js,",
+    "build:download": "webpack --mode=development --config webpack.config.js",
+    "build": "webpack --mode=development --config webpack.config.js && npm --workspace=download run build",
+    "build:prodo": "webpack --mode=production --config webpack.config.js && npm --workspace=download run build:prodo"
   },
   "engines": {
     "npm": ">=10.0"
   },
   "dependencies": {
-    "npm": "^11.17.0"
+    "npm": "^11.17.0",
+    "shoop-admin-download": "1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.1",
@@ -51,6 +58,7 @@
     "globals": "^17.7.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.7",
+    "merge": "^2.1.1",
     "mini-css-extract-plugin": "^2.10.2",
     "postcss": "^8.5.15",
     "postcss-loader": "^8.2.1",
