@@ -282,6 +282,6 @@ package-lock.json
 !./.browserslistrc
 !./.editorconfig
 !./.gitignore
-!./.husky/
+.husky/
 
 src/service/cookies

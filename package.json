@@ -12,11 +12,9 @@
     "wagtail",
     "django"
   ],
-  
   "workspaces": [
     "download"
   ],
-  
   "private": "true",
   "license": "ISC",
   "author": "undefined <Tryd0g0lik: work80@mail.ru>",
@@ -26,7 +24,9 @@
     "lint": "eslint ./src --ext ts,css,js && npm workspace=dowload run lint",
     "build:download": "webpack --mode=development --config webpack.config.js",
     "build": "webpack --mode=development --config webpack.config.js && npm --workspace=download run build",
-    "build:prodo": "webpack --mode=production --config webpack.config.js && npm --workspace=download run build:prodo"
+    "build:prodo": "webpack --mode=production --config webpack.config.js && npm --workspace=download run build:prodo",
+    "husky": "npm prepare",
+    "prepare": "husky"
   },
   "engines": {
     "npm": ">=10.0"
@@ -58,6 +58,7 @@
     "globals": "^17.7.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.7",
+    "husky": "^9.1.7",
     "merge": "^2.1.1",
     "mini-css-extract-plugin": "^2.10.2",
     "postcss": "^8.5.15",
