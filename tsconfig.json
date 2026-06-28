@@ -13,8 +13,11 @@
     "isolatedModules": true,
     "rewriteRelativeImportExtensions": true,
   },
-  "include": [
-    "./src/**/*",],
+  "include": ["./src",
+    "./src/**/*",
+    "./download/src",
+    "./download/src/**/*",
+],
   "exclude": [
     "./node_modules",
     "./node_modules/**/*.js",

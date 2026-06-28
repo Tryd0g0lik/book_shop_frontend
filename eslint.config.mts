@@ -6,7 +6,7 @@ import json from "@eslint/json";
 import css from "@eslint/css";
 import { defineConfig, globalIgnores } from "eslint/config";
 import stylisticTs  from '@stylistic/eslint-plugin';
-// const TypescriptEslintParser = require('@typescript-eslint/parser');
+// import typescriptEslintParser from '@typescript-eslint/parser';
 
 export default defineConfig([
   globalIgnores([
@@ -24,17 +24,25 @@ export default defineConfig([
     ".husky/**",
     "coverage/**",
     "*.min.js",
+    "./*.json",
   ]),
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], 
-    plugins: { js, stylisticTs, }, 
-    extends: ["js/recommended", stylisticTs.configs['recommended'], tseslint.configs.recommended,], 
-
+  
+  { files: [
+    "./src/*.{js,mjs,cjs,ts,mts,cts}",
+    "./src/**/*.{js,mjs,cjs,ts,mts,cts}",
+    "./download/src/*.{js,mjs,cjs,ts,mts,cts}",
+    "./downlod/src/**/*.{js,mjs,cjs,ts,mts,cts}",
+    
+], 
+    plugins: { js, stylisticTs }, 
+    extends: ["js/recommended", stylisticTs.configs['recommended'], tseslint.configs.recommended, ], 
+    
     languageOptions: {
        globals: globals.browser, ecmaVersion:2021,
-       parser: tseslint.parser,
        parserOptions: {
           project: './tsconfig.json',
-          tsconfigRootDir: import.meta.dirname,
+        //   tsconfigRootDir: import.meta.,
+          
         }
       },
     rules: {

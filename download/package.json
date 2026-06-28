@@ -1,7 +1,7 @@
 {
   "name": "shoop-admin-download",
   "version": "1.0.0",
-  "description": "Custom interface (for dowload of a catalog file) to the admin environmens from Wagtail",
+  "description": "Custom interface (for download of a catalog file) to the admin environmens from Wagtail",
   "homepage": "/",
   "keywords": [
     "javascript",
@@ -18,9 +18,8 @@
   "type": "commonjs",
   "main": "./src/index.ts",
   "scripts": {
-    "lint": "eslint ./src --ext ts,css,js,",
-    
-    "build": "webpack --mode=development ",
-    "build:prodo": "webpack --mode=production --config webpack.config.js"
+    "lint": "eslint",    
+    "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --config ./webpack.config.js"
   }
 }

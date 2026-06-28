@@ -1,17 +1,15 @@
 // download\webpack.config.js
 const path = require("path");
-// const { fileURLToPath } = require("url");
 const { Configuration } = require("webpack");
 require("webpack-dev-server");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 let isProduction = null;
-// console.log(`isProduction: ${isProduction} = ${ process.env.NODE_ENV}`);
 const stylesHandler = MiniCssExtractPlugin.loader;
 const BundleTracker = require('webpack-bundle-tracker');
 const config = (env, arg) => {
-    isProduction = arg.mode === "production";
+    isProduction = arg.mode !== "production";
     console.log(`config.mode: ${arg.mode}`);
     console.log(`isProduction: ${isProduction}`);
     return  {
@@ -20,8 +18,9 @@ const config = (env, arg) => {
         mode: arg.mode,
         target: "web",
         output: {
-            path: !isProduction? path.resolve(__dirname, "./dist") :path.resolve(__dirname, "../../backend/download/static/scripts/wagtail-admin"),
-            filename: "admin_dowload_[id]_[fullhash].js",
+            // path: !isProduction? path.resolve(__dirname, "./dist") :path.resolve(__dirname, "../../backend/download/static/scripts/wagtail-admin"),
+            path: path.resolve(__dirname, "../../backend/download/static/scripts/wagtail-admin"),
+            filename: "admin_download_[id]_[fullhash].js",
             // library: 'wagtailAdmin',
             // libraryTarget: 'umd',
             publicPath: "/static/download/scripts/wagtail-admin/",
@@ -38,50 +37,51 @@ const config = (env, arg) => {
             // Add your plugins here
             // Learn more about plugins expect(https://webpack.js.org/configuration/plugins/
             new BundleTracker({            
-                path: !isProduction? path.join(__dirname, '../dist/bundles') : path.join(__dirname, "../../backend/download/static"),          
+                path: !isProduction? path.join(__dirname, './dist/bundles') : path.join(__dirname, "../../backend/download/static"),          
                 filename: 'webpack-stats.json',
             }),
         ],
-        // module: {
-        //     rules: [
-        //         {
-        //             test: /\.(ts|tsx)$/i,
-        //             loader:  'babel-loader',// "ts-loader",
-        //             exclude: [
-        //                 path.resolve(__dirname, '**/dist'),
-        //                 path.resolve(__dirname, 'node_modules'),
-        //                 path.resolve(__dirname, 'dist'),
-        //             ],
-        //         },
-        //         {
-        //             test: /\.s[ac]ss$/i,
-        //             use: [MiniCssExtractPlugin.loader,
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/i,
+                    loader:  'babel-loader',// "ts-loader",
+                    
+                    exclude: [
+                        path.resolve(__dirname, '**/dist'),
+                        path.resolve(__dirname, 'node_modules'),
+                        path.resolve(__dirname, 'dist'),
+                    ],
+                },
+                {
+                    test: /\.s[ac]ss$/i,
+                    use: [MiniCssExtractPlugin.loader,
                         
-        //                 stylesHandler,'css-loader', "postcss-loader", "sass-loader"],
-        //         },
-        //         {
-        //             test: /\.css$/i,
-        //             use: [stylesHandler, 'css-loader', "postcss-loader"],
-        //         },
-        //         {
-        //             test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        //             type: "asset",
-        //         },
+                        stylesHandler,'css-loader', "postcss-loader", "sass-loader"],
+                },
+                {
+                    test: /\.css$/i,
+                    use: [stylesHandler, 'css-loader', "postcss-loader"],
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                    type: "asset",
+                },
                 
-        //         {
-        //             test: /\.html$/i,
-        //             use: ["html-loader"],
-        //         },
+                {
+                    test: /\.html$/i,
+                    use: ["html-loader"],
+                },
 
                 // Add your rules for custom modules here
                 // Learn more about loaders expect(https://webpack.js.org/loaders/
-        //     ],
-        // },
-        // resolve: {
-        //     extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
-        //     modules: [path.resolve(__dirname, 'node_modules')],
-        //     alias: []
-        // },
+            ],
+        },
+        resolve: {
+            extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+            modules: [path.resolve(__dirname, 'node_modules')],
+            alias: []
+        },
     };
 };
 

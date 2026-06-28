@@ -1,4 +1,4 @@
-const autoprefixer from "autoprefixer";
+import autoprefixer from "autoprefixer";
 
 export default {
   // Add you postcss configuration here
