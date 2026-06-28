@@ -2,7 +2,7 @@
 
 
 // Send (from an admin's catalog) a file to the server.
-const pathname = "/download/files/";
+const pathname = "/api/download/load/file/";
 
 class ModalWindow {
     __templatePathname?: string;
@@ -37,21 +37,23 @@ class ModalWindow {
          * We have a task  it read a template HTML/txt file and send it next handlers.
          * This html file is location by a server path - 'templatePath' or can inser new template whem we initional the ModalWindow's obj.
          * @param event: MouseEvent.
+                && target.getAttribute("name") !== "download-catalog"
          * @returns Promise<string | undefined> or err.
          */
         const regex = /(\.txt|\.html)$/i;
         try {
             let target = event.target as HTMLElement | null;
             if (!target) return;
-            while (!target.hasAttribute("data-name")
-                && target.getAttribute("name") !== "download-catalog") {
+            let i = 0;
+            while (!target.hasAttribute("data-name")) {
                 target = target.parentElement as HTMLElement;
+                if (i > 4) return;
             }
             const dataName: string | null = target.getAttribute("data-name");
             if (!dataName) return;
             if (dataName.toLowerCase() !== "download-catalog") return;
             // Read the template HTML/txt of file.
-            if ( !(regex.test(this.templatePath as string))) throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{"cause": "Template path is not a valid file!"}}` );
+            if ( !(regex.test(this.templatePath as string))) throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{ "cause": "Template path is not a valid file!" }}` );
             const file_ = await fetch(window.location.origin + "/" + this.templatePath as string);
             if (!file_.ok) {
                 new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: Templete html, for reciving modal html block was hot found!`);
@@ -61,7 +63,7 @@ class ModalWindow {
         catch (error) {
             if (error instanceof Error) {
                 if (error.message.includes(`${this.logTemplText}`)){
-                    throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{"cause": error}}`);
+                    throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{ "cause": error.message }}`);
                 }
                 else {
                     throw new Error(`${{ "cause": error.message }}`);
@@ -82,11 +84,11 @@ class ModalWindow {
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.logTemplText}][${this.asyncShowModalWindow.name}]: ${ {"cause": error }}`);
+                throw new Error(`[${this.logTemplText}][${this.asyncShowModalWindow.name}]: ${{ "cause": error }}`);
             };
         }
     }
-    async dropZone(dropZone: HTMLElement): Promise<void> {
+    async collectionEvents(dropZone: HTMLElement): Promise<void> {
         const formHtml: HTMLFormElement | null = dropZone.querySelector(`form[action='${pathname}']`);
         if (!formHtml) return;
         // else if ((formHtml as HTMLFormElement).files.length === 0) return;
@@ -165,7 +167,7 @@ class ModalWindow {
         }
         catch (error: Error | unknown) {
             if (error instanceof Error) {
-                throw new Error(`[${this.logTemplText}][${this.dropZone.name}]: ${{"cause": error }}`);
+                throw new Error(`[${this.logTemplText}][${this.collectionEvents.name}]: ${{ "cause": error }}`);
             };
         }
     }
@@ -202,7 +204,7 @@ class ModalWindow {
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.logTemplText}][${this.handlerEventsForm.name}]: ${{"cause": error }}`);
+                throw new Error(`[${this.logTemplText}][${this.handlerEventsForm.name}]: ${{ "cause": error }}`);
             }
         }
     }
@@ -275,7 +277,7 @@ class ModalWindow {
          * @return Promise<Boolean | JsonSourceFile> - false or data of json/object.
          */
         try {
-            const response = await fetch(pathname,
+            const response = await fetch(window.location.origin + pathname,
                 {
                     method: "POST",
                     body: formData,

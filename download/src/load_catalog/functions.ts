@@ -18,14 +18,16 @@ const asyncModalwindow = async () => {
     // It listener a click on a buttom in main html block - it is a form for
     //  a load XLS file to the product catalog.
     mainHtml.onmousedown = async (event) => {
+        const zoneHTML: HTMLElement | null = document.querySelector("div.drop-zone[id='download-drop-zone']");
         try {
-            // OPEN FORM
-            // Read the template of modal window (*.txt file).
-            const modalFormStr = await modalwondow.asyncLoadTemplateOfModalWindow(event as MouseEvent);
-            if (!modalFormStr) return;
-            // Show/publicaion the modal window.
-            await modalwondow.asyncShowModalWindow(mainHtml, modalFormStr);
-            const zoneHTML: HTMLElement | null = document.querySelector("div.drop-zone[id='download-drop-zone']");
+            if (!zoneHTML) {
+                // OPEN FORM
+                // Read the template of modal window (*.txt file).
+                const modalFormStr = await modalwondow.asyncLoadTemplateOfModalWindow(event as MouseEvent);
+                if (!modalFormStr) return;
+                // Show/publicaion the modal window.
+                await modalwondow.asyncShowModalWindow(mainHtml, modalFormStr);
+            };
             if (!zoneHTML) return;
             // It is a button for close the modal window. It is inside of the modal window body.
             const divHtml: HTMLDivElement | null = zoneHTML.querySelector("#download-drop-zone p + div");
@@ -43,7 +45,7 @@ const asyncModalwindow = async () => {
 
             // SEND FILE - listeners of Events &
             // It is a drop zone for a load XLS file to the server.
-            modalwondow.dropZone(zoneHTML);
+            modalwondow.collectionEvents(zoneHTML)
         }
         catch (error) {
             console.error(error);
