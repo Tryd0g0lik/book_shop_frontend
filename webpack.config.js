@@ -13,7 +13,7 @@ let isProduction = null;
 // console.log(`isProduction: ${isProduction} = ${ process.env.NODE_ENV}`);
 const stylesHandler = MiniCssExtractPlugin.loader;
 const BundleTracker = require('webpack-bundle-tracker');
-
+const Dotenv = require('dotenv-webpack');
 /** @type {import("webpack").Configuration} */
 const config = (env, arg) => {
     isProduction = arg.mode === "production";
@@ -33,6 +33,7 @@ const config = (env, arg) => {
             clean: true,
         },
         plugins: [
+            new Dotenv(),
             new HtmlWebpackPlugin({
                 template: "index.html"
             }),
@@ -46,6 +47,7 @@ const config = (env, arg) => {
                 path: !isProduction? path.join(__dirname, 'dist/bundles') : path.join(__dirname, "../backend/catalog/static"),          
                 filename: 'webpack-stats.json',
             }),
+            
         ],
         module: {
             rules: [

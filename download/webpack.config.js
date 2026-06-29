@@ -5,6 +5,7 @@ require("webpack-dev-server");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 let isProduction = null;
 const stylesHandler = MiniCssExtractPlugin.loader;
 const BundleTracker = require('webpack-bundle-tracker');
@@ -27,6 +28,7 @@ const config = (env, arg) => {
             clean: true,
         },
         plugins: [
+            new Dotenv(""),
             // new HtmlWebpackPlugin({
             //     template: "index.html"
             // }),
@@ -40,6 +42,7 @@ const config = (env, arg) => {
                 path: !isProduction? path.join(__dirname, './dist/bundles') : path.join(__dirname, "../../backend/download/static"),          
                 filename: 'webpack-stats.json',
             }),
+            
         ],
         module: {
             rules: [

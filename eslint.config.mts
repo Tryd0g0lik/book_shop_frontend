@@ -27,7 +27,9 @@ export default defineConfig([
     "./*.json",
   ]),
   
-  { files: [
+  { 
+    
+  files: [
     "./src/*.{js,mjs,cjs,ts,mts,cts}",
     "./src/**/*.{js,mjs,cjs,ts,mts,cts}",
     "./download/src/*.{js,mjs,cjs,ts,mts,cts}",
@@ -46,18 +48,23 @@ export default defineConfig([
         }
       },
     rules: {
-      '@stylistic/semi': ['error', 'always'],
-      '@stylistic/quotes': ['error', 'double'],
-      '@stylistic/indent': ['error', 4],
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { 
-        argsIgnorePattern: '^_',
-      }],
-      '@typescript-eslint/explicit-function-return-type': 'warn',
-      
+        '@stylistic/semi': ['error', 'always'],
+        '@stylistic/quotes': ['error', 'double'],
+        '@stylistic/indent': ['error', 4],
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        "@stylistic/indent-binary-ops": ["error", 4],
+        
+        '@typescript-eslint/no-explicit-any': 'warn',
+        '@typescript-eslint/no-unused-vars': ['error', { 
+            argsIgnorePattern: '^_',
+        }],
+        '@typescript-eslint/explicit-function-return-type': 'warn',
+
+        
+        
+     
     }
+     
    },
   
   { files: ["**/*.json"], plugins: { json }, language: "json/json", extends: ["json/recommended"] },

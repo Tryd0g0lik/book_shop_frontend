@@ -3,7 +3,6 @@
 // UTL (exemple, backend): '/admin/catalog/productgalleryimagemodel/edit/1/'.
 
 function customForm() {
-
     if (!(window.location.href.match(/((admin\/catalog\/\w+\/)(edit\/[0-1]+\/?))/))) return;
     const boxHtmlAll = document.querySelectorAll(".custom-property-value");
 
@@ -27,7 +26,7 @@ function customForm() {
             itemContent.setAttribute("hidden", "until-found");
             buttomHTMLAll[0].setAttribute("aria-expanded", "false");
         });
-    }
+    };
 };
 
 document.removeEventListener("DOMContentLoaded", () => {
@@ -38,6 +37,7 @@ document.removeEventListener("DOMContentLoaded", () => {
         console.error(error);
     };
 });
+
 document.addEventListener("DOMContentLoaded", () => {
     try {
         customForm();

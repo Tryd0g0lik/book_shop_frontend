@@ -12,11 +12,12 @@
     "erasableSyntaxOnly": true,
     "isolatedModules": true,
     "rewriteRelativeImportExtensions": true,
+    
   },
   "include": ["./src",
     "./src/**/*",
     "./download/src",
-    "./download/src/**/*",
+    "./download/src/**/*", "download/src/dorenv_.ts",
 ],
   "exclude": [
     "./node_modules",

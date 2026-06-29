@@ -32,6 +32,9 @@
     "npm": ">=10.0"
   },
   "dependencies": {
+    "@types/node": "^26.0.1",
+    "dotenv": "^17.4.2",
+    "dotenv-webpack": "^9.0.0",
     "npm": "^11.17.0",
     "shoop-admin-download": "1.0.0"
   },
