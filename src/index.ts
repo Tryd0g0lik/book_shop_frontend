@@ -3,7 +3,7 @@
 // UTL (exemple, backend): '/admin/catalog/productgalleryimagemodel/edit/1/'.
 
 function customForm() {
-    if (!(window.location.href.match(/((admin\/catalog\/\w+\/)(edit\/[0-1]+\/?))/))) return;
+    if (!(window.location.href.match(/((admin\/catalog\/\w+\/)(edit\/\d+\/?))/))) return;
     const boxHtmlAll = document.querySelectorAll(".custom-property-value");
 
     // Find all elements with the id "inline_child_". It is a list from boxes which conteins additional properties

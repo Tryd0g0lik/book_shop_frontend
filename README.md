@@ -1,15 +1,5 @@
 # 🚀 Welcome to your new awesome project!
 
-This project has been created using **create-webpack-app**, you can now run
+[Полное описание на backend-е](https://github.com/Tryd0g0lik/book_shop_backend/tree/master)
 
-```bash
-npm run build
-```
-
-or
-
-```bash
-yarn build
-```
-
-to bundle your application
+Репозиторий представлен для усиления резюме, но сама разработка продолжается
