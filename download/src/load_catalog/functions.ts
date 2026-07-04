@@ -20,7 +20,7 @@ async function handlerEventsForm(event: Event): Promise<void> {
         let files: FileList | undefined = undefined;
         // DRAG & DROP
         if (
-                typeEvent === "drop"
+               typeEvent === "drop"
             ){
                 files = (event as DragEvent).dataTransfer?.files;
             }
@@ -42,11 +42,10 @@ async function handlerEventsForm(event: Event): Promise<void> {
         try {
             // --- RECEIVE DATA OF FORMS.
             subHandlerFilesOfForm(files, CHUNK_SIZE);
-
         } catch (error) {
             // Change a text of buttom 2 / 3
             buttononform.handlerOfButtonText(event, "Error");
-            throw  error;
+            throw error;
         }
         // Change a text of buttom 3 / 3
         buttononform.handlerOfButtonText(event, buttononform.textButtomOfForm);
@@ -60,40 +59,39 @@ async function handlerEventsForm(event: Event): Promise<void> {
     // this.cleanerOfFormes(event);
 }
 
-
 async function collectionOfEvents(dropZone: HTMLElement): Promise<void> {
     const formHtml: HTMLFormElement | null = dropZone.querySelector(`form[action='${PATHNAME}']`);
     if (!formHtml) return;
     // else if ((formHtml as HTMLFormElement).files.length === 0) return;
     // Drap&Drop - File entering to the zone of drop
-    dropZone.removeEventListener("dragenter", event => {
+    dropZone.removeEventListener("dragenter", (event) => {
         event.preventDefault();
     });
-    dropZone.addEventListener("dragenter", event => {
+    dropZone.addEventListener("dragenter", (event) => {
         event.preventDefault();
     });
-    dropZone.removeEventListener("dragover", event => {
+    dropZone.removeEventListener("dragover", (event) => {
         event.preventDefault();
     });
-    dropZone.addEventListener("dragover", event => {
+    dropZone.addEventListener("dragover", (event) => {
         event.preventDefault();
     });
 
     // Drap&Drop - File exit from the zone of drop
-    dropZone.removeEventListener("dragleave", event => {
+    dropZone.removeEventListener("dragleave", (event) => {
         event.preventDefault();
     });
-    dropZone.addEventListener("dragleave", event => {
+    dropZone.addEventListener("dragleave", (event) => {
         event.preventDefault();
     });
     // Drap&Drop - File drop
-    dropZone.removeEventListener("drop", async event => {
+    dropZone.removeEventListener("drop", async (event) => {
         event.preventDefault();
         // await this.handlerOfDrapDropForm(event);
         handlerEventsForm(event);
     });
 
-    dropZone.addEventListener("drop", async event => {
+    dropZone.addEventListener("drop", async (event) => {
         /**
          * Drap&Drop - Here we get data from a browser.
          */
@@ -163,19 +161,19 @@ async function subHandlerFilesOfForm(files: FileList, sizeChank: number): Promis
     const logTemplText = "[subHandlerFilesOfForm]";
     // Drap&Drop - Receive files.
     try {
-        for (let ind =  0; ind < files.length; ind++){
-            let totalChunks = Math.ceil(files[ind].size / sizeChank);
+        for (let ind = 0; ind < files.length; ind++) {
+            const totalChunks = Math.ceil(files[ind].size / sizeChank);
 
             // --- SEND FILES TO THE SERVER.
-            const f = files[ind].slice(0, -1)
+            const f = files[ind].slice(0, -1);
             let sentChunkSize = 0;
-            for (let i = 0; i < totalChunks; i++) {
+            for (let i = 0; i < totalChunks; i++){
 
                 const fileExtention = files[ind].name.split(".").pop() || "";
                 const fileName = (files[ind].name as string).slice();
                 formData.append("total_chunks", totalChunks.toString());
                 formData.append("file_extention", fileExtention);
-                formData.append("chunk_index", i.toString())
+                formData.append("chunk_index", i.toString());
                 // --- SEND FILES TO THE SERVER.
                 formData.append("file_name", fileName);
                 formData.append("file", f.slice(sentChunkSize, sentChunkSize += sizeChank));
@@ -185,7 +183,9 @@ async function subHandlerFilesOfForm(files: FileList, sizeChank: number): Promis
                 formData.append(csrftokenHtml.name, csrftokenHtml.value);
                 const response = await requestPost(formData);
 
-                console.log(`Response: ${typeof response === "object"? Object.keys(response) : response}`);
+                console.log(`Response: ${typeof response === "object"
+                    ? Object.keys(response)
+                    : response}`);
                 if (!response) {
                     throw new Error("Files was not sent!");
                 };
@@ -193,7 +193,7 @@ async function subHandlerFilesOfForm(files: FileList, sizeChank: number): Promis
         };
     }
     catch (error) {
-        throw new Error(`[${logTemplText}][${subHandlerFilesOfForm.name}]: ${(error as Error).message }`);
+        throw new Error(`[${logTemplText}][${subHandlerFilesOfForm.name}]: ${(error as Error).message}`);
     };
 };
 

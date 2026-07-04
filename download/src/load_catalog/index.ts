@@ -4,7 +4,6 @@ class ModalWindow {
     __templatePathname?: string;
     logTemplText?: string;
 
-
     constructionor() {
         /**
          * @param __templatePathname: string | undefined - path to a template html/txt file. This is the 'confirm_convert_alias.txt' now.
@@ -82,13 +81,12 @@ class ModalWindow {
         catch (error) {
             if (error instanceof Error) {
                 throw new Error(`[${this.logTemplText}][${this.asyncShowModalWindow.name}]: ${{ "cause": error }}`);
-            };
+            }
         }
     }
 }
 
 class ButtonOnForm {
-
     textButtomOfForm?: string;
     logTemplText?: string;
     constructor() {
@@ -112,15 +110,13 @@ class ButtonOnForm {
             if (!buttomHtml) {
                 return;
              };
-
             if (!buttomHtml.textContent.toLowerCase().includes("sending")){
                 buttomHtml.classList.add("active");
                 this.textButtomOfForm = buttomHtml.innerHTML;
-                buttomHtml.innerHTML = "";
+                buttomHtml.innerHTML.replace(/[/w А-Яа-я]+/, "");
                 buttomHtml.insertAdjacentText("beforeend", text);
             } else {
-
-                buttomHtml.innerHTML = "";
+                buttomHtml.innerHTML.replace;
                 if (text.toLowerCase().includes("error")) {
                     buttomHtml.insertAdjacentText("beforeend", text);
                 }

@@ -5,8 +5,6 @@
 //         this.divHtml = obj ? obj : document.querySelector("div.changelist-filter");
 //     }
 
-
-
 //     is_exist(): boolean {
 //         if (this.divHtml) {
 //             return true;
