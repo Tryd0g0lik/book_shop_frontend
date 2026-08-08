@@ -23,6 +23,7 @@ const config = (env, arg) => {
         entry: "./src/index.ts",
         cache: false,
         mode: arg.mode,
+        
         target: "web",
         output: {
             path: !isProduction? path.resolve(__dirname, "dist") :path.resolve(__dirname, "../backend/catalog/static/scripts/wagtail-admin"),
@@ -33,7 +34,10 @@ const config = (env, arg) => {
             clean: true,
         },
         plugins: [
-            new Dotenv(),
+            new Dotenv({
+                systemvars: true,
+                defaults: "/.env"
+            }),
             new HtmlWebpackPlugin({
                 template: "index.html"
             }),

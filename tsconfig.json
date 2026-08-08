@@ -17,7 +17,8 @@
   "include": ["./src",
     "./src/**/*",
     "./download/src",
-    "./download/src/**/*", "download/src/dorenv_.ts",
+    "./download/src/**/*", 
+    "download/src/dorenv_.ts",
 ],
   "exclude": [
     "./node_modules",

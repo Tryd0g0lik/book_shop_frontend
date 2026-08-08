@@ -28,7 +28,11 @@ const config = (env, arg) => {
             clean: true,
         },
         plugins: [
-            new Dotenv(""),
+            new Dotenv({
+                systemvars: true,
+                defaults: "/.env",
+            }),
+    
             // new HtmlWebpackPlugin({
             //     template: "index.html"
             // }),

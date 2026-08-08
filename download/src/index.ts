@@ -2,6 +2,7 @@
 import { asyncModalwindow } from "./load_catalog/functions";
 import { publishButtomDownloadCatalog } from "./functions";
 
+
 document.removeEventListener("DOMContentLoaded", async () => {
     // EVENT LISTENER
     try {

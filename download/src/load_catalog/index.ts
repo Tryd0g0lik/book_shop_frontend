@@ -1,16 +1,19 @@
 // download\src\load_catalog\index.ts
+import { Timer } from "../timer";
+import { MAX_FILE_SIZE_BYTES } from "../dorenv_";
+
 // Send (from an admin's catalog) a file to the server.
 class ModalWindow {
     __templatePathname?: string;
-    logTemplText?: string;
-
+    __prefixLog: string = "[ModalWindow]";
+    __MAX_FILE_SIZE_BYTES: number = Number(MAX_FILE_SIZE_BYTES);
     constructionor() {
         /**
          * @param __templatePathname: string | undefined - path to a template html/txt file. This is the 'confirm_convert_alias.txt' now.
-         * @param logTemplText: string - Prefix for a tex log.
+         * @param __prefixLog: string - Prefix for a tex log.
+         * @param MAX_FILE_SIZE_BYTES: number - THis is max size of bytes/Mb for upload a single Excel file.
          */
         this.__templatePathname = undefined;
-        this.logTemplText = "[ModalWindow]";
     }
 
     static __getClassName(): string {
@@ -25,46 +28,22 @@ class ModalWindow {
         return this.__templatePathname as string;
     }
 
-    async asyncLoadTemplateOfModalWindow(event: MouseEvent): Promise<string | undefined> {
-        /**
-         * Open a modal window.
-         * We have a task  it read a template HTML/txt file and send it next handlers.
-         * This html file is location by a server path - 'templatePath' or can inser new template whem we initional the ModalWindow's obj.
-         * @param event: MouseEvent.
-                && target.getAttribute("name") !== "download-catalog"
-         * @returns Promise<string | undefined> or err.
-         */
-        const regex = /(\.txt|\.html)$/i;
+    checkSizeFile(file?: FileList) {
+        // Check valid of a file size
+        // true if the file less then the 'MAX_FILE_SIZE_BYTES' or more.
         try {
-            let target = event.target as HTMLElement | null;
-            if (!target) return;
-            let i = 0;
-            while (!target.hasAttribute("data-name")) {
-                target = target.parentElement as HTMLElement;
-                if (i > 4) return;
-                i++;
+            if (!file) return false;
+            for (let i = 0; i < file.length; i++) {
+                if (file[i].size > this.__MAX_FILE_SIZE_BYTES) return false;
             }
-            const dataName: string | null = target.getAttribute("data-name");
-            if (!dataName) return;
-            if (dataName.toLowerCase() !== "download-catalog") return;
-            // Read the template HTML/txt of file.
-            if ( !(regex.test(this.templatePath as string))) throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{ "cause": "Template path is not a valid file!" }}` );
-            const file_ = await fetch(window.location.origin + "/" + this.templatePath as string);
-            if (!file_.ok) {
-                new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: Templete html, for reciving modal html block was hot found!`);
-            };
-            return await file_.text();
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.message.includes(`${this.logTemplText}`)){
-                    throw new Error(`[${this.logTemplText}][${this.asyncLoadTemplateOfModalWindow.name}]: ${{ "cause": error.message }}`);
-                }
-                else {
-                    throw new Error(`${{ "cause": error.message }}`);
-                };
+        } catch (err) {
+            if (err instanceof Error) {
+                const errorT = `${this.__prefixLog}[${this.checkSizeFile.name}]: ${err.name} => ${err.message}`;
+                console.error(errorT);
+                return false;
             }
         }
+        return true;
     }
 
     async asyncShowModalWindow(parentHtml: HTMLElement, bodyStr: string): Promise<void> {
@@ -80,23 +59,30 @@ class ModalWindow {
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.logTemplText}][${this.asyncShowModalWindow.name}]: ${{ "cause": error }}`);
+                throw new Error(`[${this.__prefixLog}][${this.asyncShowModalWindow.name}]: ${error}`);
             }
         }
     }
-}
+};
+
 
 class ButtonOnForm {
     textButtomOfForm?: string;
-    logTemplText?: string;
+    __prefixLog?: string;
+    timer = new Timer(3);
+    __spanHTML?: HTMLSpanElement | ChildNode;
+    __textElemenet?: string | ChildNode;
     constructor() {
-        this.textButtomOfForm = "Download";
-        this.logTemplText = "[FilesUpload]";
-    }
+        this.textButtomOfForm = "It was uploaded successfully!";
+        this.__prefixLog = "[FilesUpload]";
+        this.__spanHTML = undefined;
+        this.__textElemenet = undefined;
+    };
 
     handlerOfButtonText(event: Event, text = "Sending"): void {
         /**
          * This method work with a buttom of form.
+         * HEre is we created a new buttom with the 'text' name;
          * @param text: string - text of buttom. Default: "Sending".
          * @retrun void.
          */
@@ -110,28 +96,64 @@ class ButtonOnForm {
             if (!buttomHtml) {
                 return;
              };
-            if (!buttomHtml.textContent.toLowerCase().includes("sending")){
+            if (!(buttomHtml).hasChildNodes()) {
+                throw new Error(`${this.__prefixLog}[${this.handlerOfButtonText.name}]: Error => Buttom of test not found!`);
+            };
+            const childrens: NodeListOf<ChildNode> = buttomHtml.childNodes;
+            // ============================================
+            // GETING THE BUTTOM OF CHILDREN RLRMRNTS
+            // ============================================
+            if (childrens.length >= 3){
+                this.__spanHTML = childrens[1].cloneNode(true) as ChildNode;
+                this.__textElemenet = childrens[2].cloneNode(true) as ChildNode;
+            };
+            // ---
+            if (!buttomHtml.textContent.toLowerCase().includes("sending")) {
                 buttomHtml.classList.add("active");
-                this.textButtomOfForm = buttomHtml.innerHTML;
-                buttomHtml.innerHTML.replace(/[/w А-Яа-я]+/, "");
+                // ============================================
+                // CHANGING THE TEXT OF BUTTOM
+                // ============================================
+                buttomHtml.innerText = "";
+                buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                 buttomHtml.insertAdjacentText("beforeend", text);
             } else {
-                buttomHtml.innerHTML.replace;
+                buttomHtml.innerText = "";
+
                 if (text.toLowerCase().includes("error")) {
+                    // buttomHtml.querySelector("span")?.remove();
+
+                    // buttomHtml.insertAdjacentElement("afterbegin", spanHTML);
                     buttomHtml.insertAdjacentText("beforeend", text);
                 }
                 else {
+                    // ============================================
+                    // CHANGING THE TEXT OF BUTTOM
+                    // ============================================
+                    buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                     buttomHtml.insertAdjacentHTML("beforeend", this.textButtomOfForm as string);
+                    // ============================================
+                    // TIMER 3 seconds
+                    // ============================================
+                    this.timer.getTimer();
+                    // ============================================
+                    // REMOVE THE CLASS NAME
+                    // ============================================
                     buttomHtml.classList.remove("active");
+                    // ============================================
+                    // CHANGING THE TEXT OF BUTTOM
+                    // ============================================
+                    buttomHtml.innerText = "";
+                    buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
+                    buttomHtml.insertAdjacentText("beforeend", (this.__textElemenet as HTMLTextAreaElement).textContent);
                 }
             }
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.logTemplText}][${this.handlerOfButtonText.name}]: ${{ "cause": error }}`);
+                throw new Error(`[${this.__prefixLog}][${this.handlerOfButtonText.name}]: ${{"cause": error}}`);
             }
         }
-    }
+    };
 
     cleanerOfFormes(event: Event): void {
         // Clean a form.
