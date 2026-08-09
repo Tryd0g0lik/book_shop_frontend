@@ -2,26 +2,20 @@
 import { asyncModalwindow } from "./load_catalog/functions";
 import { publishButtomDownloadCatalog } from "./functions";
 
-
-document.removeEventListener("DOMContentLoaded", async () => {
-    // EVENT LISTENER
+const servises = async () => {
     try {
-        // EVENT DOM DOWNLOAD
         publishButtomDownloadCatalog();
-        // eVENT MOUSDOWN
-        await asyncModalwindow();
+        setTimeout(() => new Promise((resolve) => {
+             asyncModalwindow();
+             return resolve
+            }), 700);
+
     }
     catch (error) {
         console.error(error);
     }
-});
+};
 
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        publishButtomDownloadCatalog();
-        await asyncModalwindow();
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
+document.removeEventListener("DOMContentLoaded", servises);
+
+document.addEventListener("DOMContentLoaded", servises);

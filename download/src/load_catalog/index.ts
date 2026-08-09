@@ -1,5 +1,5 @@
 // download\src\load_catalog\index.ts
-import { Timer } from "../timer";
+
 import { MAX_FILE_SIZE_BYTES } from "../dorenv_";
 
 // Send (from an admin's catalog) a file to the server.
@@ -36,7 +36,8 @@ class ModalWindow {
             for (let i = 0; i < file.length; i++) {
                 if (file[i].size > this.__MAX_FILE_SIZE_BYTES) return false;
             }
-        } catch (err) {
+        }
+        catch (err) {
             if (err instanceof Error) {
                 const errorT = `${this.__prefixLog}[${this.checkSizeFile.name}]: ${err.name} => ${err.message}`;
                 console.error(errorT);
@@ -59,17 +60,15 @@ class ModalWindow {
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.__prefixLog}][${this.asyncShowModalWindow.name}]: ${error}`);
+                throw new Error(`[${this.__prefixLog}][${this.asyncShowModalWindow.name}]: Name: ${error.name} & Massage:${error.message}.`, { cause: error });
             }
         }
     }
 };
 
-
 class ButtonOnForm {
     textButtomOfForm?: string;
     __prefixLog?: string;
-    timer = new Timer(3);
     __spanHTML?: HTMLSpanElement | ChildNode;
     __textElemenet?: string | ChildNode;
     constructor() {
@@ -79,13 +78,14 @@ class ButtonOnForm {
         this.__textElemenet = undefined;
     };
 
-    handlerOfButtonText(event: Event, text = "Sending"): void {
+    async handlerOfButtonText(event: Event, text = "Sending"): Promise<void> {
         /**
-         * This method work with a buttom of form.
-         * HEre is we created a new buttom with the 'text' name;
-         * @param text: string - text of buttom. Default: "Sending".
+         * This method work with a button of form.
+         * HEre is we created a new button with the 'text' name;
+         * @param text: string - text of button. Default: "Sending".
          * @retrun void.
          */
+        const prefixLog = `${this.__prefixLog}[${this.handlerOfButtonText.name}]:`;
         try {
             let target = event.target as HTMLElement | null;
             while (target && target.id && target.id !== "download-drop-zone") {
@@ -103,27 +103,27 @@ class ButtonOnForm {
             // ============================================
             // GETING THE BUTTOM OF CHILDREN RLRMRNTS
             // ============================================
-            if (childrens.length >= 3){
+            if (childrens.length >= 3) {
                 this.__spanHTML = childrens[1].cloneNode(true) as ChildNode;
                 this.__textElemenet = childrens[2].cloneNode(true) as ChildNode;
             };
             // ---
+            buttomHtml.classList.add("active");
             if (!buttomHtml.textContent.toLowerCase().includes("sending")) {
-                buttomHtml.classList.add("active");
+                console.debug(`${prefixLog} DEBUG Got the class "active".`);
                 // ============================================
                 // CHANGING THE TEXT OF BUTTOM
                 // ============================================
                 buttomHtml.innerText = "";
                 buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
-                buttomHtml.insertAdjacentText("beforeend", text);
-            } else {
+                buttomHtml.insertAdjacentHTML("beforeend", text);
+                console.debug(`${prefixLog} DEBUG Got text: ${text} Now sleep.`);
+            }
+            else {
                 buttomHtml.innerText = "";
-
                 if (text.toLowerCase().includes("error")) {
-                    // buttomHtml.querySelector("span")?.remove();
-
-                    // buttomHtml.insertAdjacentElement("afterbegin", spanHTML);
-                    buttomHtml.insertAdjacentText("beforeend", text);
+                    buttomHtml.insertAdjacentHTML("beforeend", text);
+                    console.debug(`${prefixLog} DEBUG Got text: ${text} Now sleep.`);
                 }
                 else {
                     // ============================================
@@ -131,26 +131,26 @@ class ButtonOnForm {
                     // ============================================
                     buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                     buttomHtml.insertAdjacentHTML("beforeend", this.textButtomOfForm as string);
-                    // ============================================
-                    // TIMER 3 seconds
-                    // ============================================
-                    this.timer.getTimer();
-                    // ============================================
-                    // REMOVE THE CLASS NAME
-                    // ============================================
-                    buttomHtml.classList.remove("active");
+                    console.debug(`${prefixLog} DEBUG Got text: ${this.textButtomOfForm as string}. Now sleep.`);
                     // ============================================
                     // CHANGING THE TEXT OF BUTTOM
                     // ============================================
                     buttomHtml.innerText = "";
                     buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
-                    buttomHtml.insertAdjacentText("beforeend", (this.__textElemenet as HTMLTextAreaElement).textContent);
+                    buttomHtml.insertAdjacentHTML("beforeend", (this.__textElemenet as HTMLTextAreaElement).textContent);
+                    console.debug(`${prefixLog} DEBUG Got text: ${(this.__textElemenet as HTMLTextAreaElement).textContent}`);
+
                 }
+                // ============================================
+                // REMOVE THE CLASS NAME
+                // ============================================
+                buttomHtml.classList.remove("active");
+                console.debug(`${prefixLog} DEBUG Removed the class 'active'.`);
             }
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`[${this.__prefixLog}][${this.handlerOfButtonText.name}]: ${{"cause": error}}`);
+                throw new Error(`${this.__prefixLog}[${this.handlerOfButtonText.name}]: Name: ${error.name} & Massage:${error.message}.`, { cause: error });
             }
         }
     };

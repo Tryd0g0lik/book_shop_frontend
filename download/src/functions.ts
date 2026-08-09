@@ -2,8 +2,8 @@
 
 function publishButtomDownloadCatalog() {
     /**
-     * Admin Wagtail's interface receiving a (html block ) buttom ('<button type="button" data-name="download-catalog" ...>') for a download XLS file.
-     * This function is a filter for this buttom.
+     * Admin Wagtail's interface receiving a (html block ) button ('<button type="button" data-name="download-catalog" ...>') for a download XLS file.
+     * This function is a filter for this button.
      * We can see it only on the page of catalog of product (publish her).
      */
     const regex_catalog = /(admin\/catalog\/\products\/)/;
