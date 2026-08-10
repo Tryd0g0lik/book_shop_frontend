@@ -59,7 +59,7 @@ export default defineConfig([
             argsIgnorePattern: '^_',
         }],
         '@typescript-eslint/explicit-function-return-type': 'warn',
-
+        '@stylistic/padded-blocks': ["error", "always"]
         
         
      
