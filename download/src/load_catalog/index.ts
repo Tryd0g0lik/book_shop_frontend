@@ -144,7 +144,7 @@ class ButtonOnForm {
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(`${this.__prefixLog}[${this.handlerOfButtonText.name}]: Name: ${error.name} & Massage:${error.message}.`, { cause: error });
+                throw new Error(`${prefixLog} Name: ${error.name} & Massage:${error.message}.`, { cause: error });
             }
         }
     };

@@ -3,7 +3,7 @@
 // - open a modal window;
 // - sending files;
 // - close a modal window.
-import { PATHNAME, MAX_CHUNK_SIZE_FILE_BYTES } from "../dorenv_";
+import { PATHNAME,LANGUAGE_SUPPORTED_OF_BROWSER, MAX_CHUNK_SIZE_FILE_BYTES } from "../dorenv_";
 import { ModalWindow, ButtonOnForm } from ".";
 
 // Size of chunk for sending of chunks
@@ -14,7 +14,9 @@ const buttononform = new ButtonOnForm();
 // This is the heandler  which is open the form for upload the file.
 type T = { templatePath: string, prefixLog: string };
 function getFormDropZone(props: T): CallableFunction {
+
     const { templatePath, prefixLog } = props;
+
     async function asyncLoadTemplateOfModalWindow(event: MouseEvent): Promise<string | undefined> {
         /**
          * Open a modal window.
@@ -24,19 +26,28 @@ function getFormDropZone(props: T): CallableFunction {
             && target.getAttribute("name") !== "download-catalog"
          * @returns Promise<string | undefined> or err.
         */
+       const warnText: string = `${prefixLog}[${getFormDropZone.name}][${asyncLoadTemplateOfModalWindow.name}]:`;
         const regex = /(\.txt|\.html)$/i;
         try {
             let target = event.target as HTMLElement | null;
             if (!target) return;
-            let i = 0;
+            let controller: number = 0;
+            // Search for the first element with a "data-name" attribute
             while (!target.hasAttribute("data-name")) {
+
                 target = target.parentElement as HTMLElement;
-                if (i > 4) return;
-                i++;
+                if (controller > 4) {
+                    console.warn(warnText + "The 'data-name' not found!" + " Idexes of the element more 4");
+                    return;
+                };
+                if (!target){
+                    console.warn(warnText  + "The 'data-name' not found!");
+                    return;
+                }
+                controller++;
             }
-            const dataName: string | null = target.getAttribute("data-name");
-            if (!dataName) return;
-            if (dataName.toLowerCase() !== "download-catalog") return;
+            const dataName = target.getAttribute("data-name");
+            if ((dataName as string).toLowerCase() !== "download-catalog") return;
             // Read the template HTML/txt of file.
             if (!(regex.test(templatePath as string))) throw new Error(`[${prefixLog}][${asyncLoadTemplateOfModalWindow.name}]:
                 Massage: ${"Template path is not a valid file!"}`);
@@ -70,7 +81,6 @@ async function handlerEventsForm(event: Event): Promise<void> {
         const typeEvent = event.type.toLowerCase();
         let files: FileList | undefined = undefined;
         const modalW = new ModalWindow();
-        // event.preventDefault();
         // ============================================
         // DRAG & DROP
         // ============================================
@@ -281,8 +291,17 @@ const asyncModalwindow = async () => {
      * We should get a html block in main html block on the admin 'Catalog' page.
      * This is additional interfecae for a load the XLS file to the cataloc.
      */
-    const modalwondow = new ModalWindow();
-    modalwondow.templatePath = "static/modal_pages/confirm_convert_alias.txt";
+    const modalwindow = new ModalWindow();
+    modalwindow.templatePath = "static/modal_pages/confirm_convert_alias.txt";
+    // ============================================
+    // Languages RU US FR
+    // ============================================
+    const langRuUsFr: string = LANGUAGE_SUPPORTED_OF_BROWSER.split("-")[0]
+    if (langRuUsFr === "ru") {
+        modalwindow.templatePath = "static/modal_pages/confirm_convert_alias_ru.txt";
+    } else if (langRuUsFr === "fr"){
+        modalwindow.templatePath = "static/modal_pages/confirme_conversion_aliases_fr.html";
+    }
     const mainHtml: HTMLElement | null = document.querySelector("main[id='main'] header div[class='right']");
     if (!mainHtml) return;
     // ============================================
@@ -300,7 +319,7 @@ const asyncModalwindow = async () => {
                 // --- EVENT OF OPEN FORM ---
                 // ============================================
                 // Read the template of modal window (*.txt file).
-                const props = { templatePath: modalwondow.templatePath, prefixLog: modalwondow.__prefixLog };
+                const props = { templatePath: modalwindow.templatePath, prefixLog: modalwindow.__prefixLog };
                 const formDropZone = getFormDropZone(props);
 
                 const modalFormStr = await formDropZone(event as MouseEvent);
@@ -308,7 +327,7 @@ const asyncModalwindow = async () => {
                 // ============================================
                 // SHOW/publicaion THE MODAL WINDOW.
                 // ============================================
-                await modalwondow.asyncShowModalWindow(mainHtml, modalFormStr);
+                await modalwindow.asyncShowModalWindow(mainHtml, modalFormStr);
             };
             zoneHTML = document.querySelector("div.drop-zone[id='download-drop-zone']");
             // It is a button for close the modal window. It is inside of the modal window body.
