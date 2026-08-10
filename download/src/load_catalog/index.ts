@@ -110,20 +110,17 @@ class ButtonOnForm {
             // ---
             buttomHtml.classList.add("active");
             if (!buttomHtml.textContent.toLowerCase().includes("sending")) {
-                console.debug(`${prefixLog} DEBUG Got the class "active".`);
                 // ============================================
                 // CHANGING THE TEXT OF BUTTOM
                 // ============================================
                 buttomHtml.innerText = "";
                 buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                 buttomHtml.insertAdjacentHTML("beforeend", text);
-                console.debug(`${prefixLog} DEBUG Got text: ${text} Now sleep.`);
             }
             else {
                 buttomHtml.innerText = "";
                 if (text.toLowerCase().includes("error")) {
                     buttomHtml.insertAdjacentHTML("beforeend", text);
-                    console.debug(`${prefixLog} DEBUG Got text: ${text} Now sleep.`);
                 }
                 else {
                     // ============================================
@@ -131,21 +128,18 @@ class ButtonOnForm {
                     // ============================================
                     buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                     buttomHtml.insertAdjacentHTML("beforeend", this.textButtomOfForm as string);
-                    console.debug(`${prefixLog} DEBUG Got text: ${this.textButtomOfForm as string}. Now sleep.`);
                     // ============================================
                     // CHANGING THE TEXT OF BUTTOM
                     // ============================================
                     buttomHtml.innerText = "";
                     buttomHtml.insertAdjacentElement("afterbegin", this.__spanHTML as HTMLSpanElement);
                     buttomHtml.insertAdjacentHTML("beforeend", (this.__textElemenet as HTMLTextAreaElement).textContent);
-                    console.debug(`${prefixLog} DEBUG Got text: ${(this.__textElemenet as HTMLTextAreaElement).textContent}`);
 
                 }
                 // ============================================
                 // REMOVE THE CLASS NAME
                 // ============================================
                 buttomHtml.classList.remove("active");
-                console.debug(`${prefixLog} DEBUG Removed the class 'active'.`);
             }
         }
         catch (error) {
